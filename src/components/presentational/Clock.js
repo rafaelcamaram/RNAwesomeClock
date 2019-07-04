@@ -48,7 +48,10 @@ export default class Clock extends Component {
       minuteHandCurved,
       minuteHandColor,
       secondHandOffset,
-      secondHandLength
+      secondHandWidth,
+      secondHandLength,
+      secondHandCurved,
+      secondHandColor
     } = this.props;
 
     return [
@@ -80,10 +83,10 @@ export default class Clock extends Component {
           <SecondsView
             size={clockSize}
             centerSize={clockCentreSize}
-            handWidth={minuteHandWidth}
-            handLength={minuteHandLength}
-            handCurved={minuteHandCurved}
-            handColor={minuteHandColor}
+            handWidth={secondHandWidth}
+            handLength={secondHandLength}
+            handCurved={secondHandCurved}
+            handColor={secondHandColor}
             style={[this.rotateFunction(sec, 'translateY', secondHandOffset, secondHandLength)]}
           />
 
@@ -187,6 +190,9 @@ Clock.defaultProps = {
   minuteHandWidth: 2,
   minuteHandOffset: 0,
 
-  secondHandLength: 70,
+  secondHandColor: COLORS.white,
+  secondHandCurved: true,
+  secondHandLength: 90,
+  secondHandWidth: 0.5,
   secondHandOffset: 0
 };
