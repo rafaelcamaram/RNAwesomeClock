@@ -1,15 +1,17 @@
 import React, { Fragment } from 'react';
 import { SafeAreaView, StatusBar, Dimensions, StyleSheet, ScrollView, View } from 'react-native';
 
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+/* Config - imports */
+import COLORS from './src/config/colors';
 
-import Clock from './Clock';
+/* Presentational - components - imports */
+import Clock from './src/components/presentational/Clock';
 
 const App = () => {
   return (
     <Fragment>
       <StatusBar animated barStyle="light-content" />
-      <SafeAreaView style={{ backgroundColor: '#0B1521' }}>
+      <SafeAreaView style={{ backgroundColor: COLORS.primary }}>
         <ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
           <View style={styles.body}>
             <Clock />
@@ -23,31 +25,13 @@ const App = () => {
 const styles = StyleSheet.create({
   scrollView: {
     height: Dimensions.get('window').height,
-    backgroundColor: '#0B1521'
+    backgroundColor: COLORS.primary
   },
   body: {
     height: Dimensions.get('window').height,
-    backgroundColor: '#0B1521',
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark
-  },
-  highlight: {
-    fontWeight: '700'
   }
 });
 

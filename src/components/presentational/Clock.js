@@ -2,34 +2,33 @@ import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 import styled from 'styled-components';
 
+/* Config - imports */
+import COLORS from '../../config/colors';
+
+/* Utils - imports */
+import { getCurrentTime } from '../../utils/help';
+
 export default class Clock extends Component {
   constructor(props) {
     super(props);
 
-    let date = new Date();
-
-    this.state = {
-      time: '--:--',
-      sec: date.getSeconds() * 6,
-      min: date.getMinutes() * 6 + (date.getSeconds() * 6) / 60,
-      hour: ((date.getHours() % 12) / 12) * 360 + 90 + (date.getMinutes() * 6 + (date.getSeconds() * 6) / 60) / 12
-    };
+    this.state = getCurrentTime();
   }
 
   componentDidMount() {
     this.timer = setInterval(() => {
-      let date = new Date();
-      this.setState({
-        time: `${date.getHours()}:${date.getMinutes()}`,
-        sec: date.getSeconds() * 6,
-        min: date.getMinutes() * 6 + (date.getSeconds() * 6) / 60,
-        hour: ((date.getHours() % 12) / 12) * 360 + 90 + (date.getMinutes() * 6 + (date.getSeconds() * 6) / 60) / 12
-      });
+      this.setState(getCurrentTime());
     }, 1000);
   }
 
   componentWillUnmount() {
     clearInterval(this.timer);
+  }
+
+  rotateFunction(value, type, offset, length) {
+    return {
+      transform: [{ rotate: value + 'deg' }, { [type]: -(offset + length / 2) }]
+    };
   }
 
   render() {
@@ -54,7 +53,7 @@ export default class Clock extends Component {
 
     return [
       <View key="digital">
-        <Text style={{ color: 'white', fontSize: 50 }}>{time}</Text>
+        <Text style={{ color: COLORS.white, fontSize: 50 }}>{time}</Text>
       </View>,
       <ClockFrame key="clock" size={clockSize} borderWidth={clockBorderWidth}>
         <ClockHolder borderWidth={clockBorderWidth} size={clockSize}>
@@ -65,11 +64,7 @@ export default class Clock extends Component {
             handLength={hourHandLength}
             handCurved={hourHandCurved}
             handColor={hourHandColor}
-            style={[
-              {
-                transform: [{ rotate: hour + 'deg' }, { translateX: -(hourHandOffset + hourHandLength / 2) }]
-              }
-            ]}
+            style={[this.rotateFunction(hour, 'translateX', hourHandOffset, hourHandLength)]}
           />
 
           <MinutesView
@@ -79,11 +74,7 @@ export default class Clock extends Component {
             handLength={minuteHandLength}
             handCurved={minuteHandCurved}
             handColor={minuteHandColor}
-            style={[
-              {
-                transform: [{ rotate: min + 'deg' }, { translateY: -(minuteHandOffset + minuteHandLength / 2) }]
-              }
-            ]}
+            style={[this.rotateFunction(min, 'translateY', minuteHandOffset, minuteHandLength)]}
           />
 
           <SecondsView
@@ -93,11 +84,7 @@ export default class Clock extends Component {
             handLength={minuteHandLength}
             handCurved={minuteHandCurved}
             handColor={minuteHandColor}
-            style={[
-              {
-                transform: [{ rotate: sec + 'deg' }, { translateY: -(secondHandOffset + secondHandLength / 2) }]
-              }
-            ]}
+            style={[this.rotateFunction(sec, 'translateY', secondHandOffset, secondHandLength)]}
           />
 
           <ClockFace size={clockSize} centerSize={clockCentreSize} />
@@ -111,7 +98,7 @@ const ClockFrame = styled.View`
   width: ${props => props.size};
   aspect-ratio: 1;
   position: relative;
-  border-color: #26303e;
+  border-color: ${COLORS.clockBorder};
   border-width: ${props => props.borderWidth};
   border-radius: ${props => props.size / 2};
 `;
@@ -153,7 +140,7 @@ const ClockHand = styled.View`
   border-top-left-radius: ${props => (props.handCurved ? props.handWidth : 0)};
   border-bottom-left-radius: ${props => (props.handCurved ? props.handWidth : 0)};
 
-  background-color: ${props => (props.handColor ? props.handColor : 'white')};
+  background-color: ${props => (props.handColor ? props.handColor : COLORS.white)};
 `;
 
 const HoursView = styled(ClockHand)``;
@@ -186,15 +173,15 @@ Clock.defaultProps = {
   clockSize: 220,
   clockBorderWidth: 6,
   clockCentreSize: 12,
-  clockCentreColor: 'white',
+  clockCentreColor: COLORS.white,
 
-  hourHandColor: '#F35656',
+  hourHandColor: COLORS.secondary,
   hourHandCurved: true,
   hourHandLength: 80,
   hourHandWidth: 1,
   hourHandOffset: 0,
 
-  minuteHandColor: 'white',
+  minuteHandColor: COLORS.white,
   minuteHandCurved: true,
   minuteHandLength: 70,
   minuteHandWidth: 2,
